@@ -17,6 +17,8 @@ from django.contrib import admin
 from django.urls import path
 from main.views import *
 from django.contrib.auth.views import LogoutView
+from . import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -29,3 +31,6 @@ urlpatterns = [
     path('edit/<int:id>', edit, name='edit'),
     path('delete/<int:id>', delete, name='delete'),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
