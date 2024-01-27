@@ -6,7 +6,7 @@ from datetime import datetime
 @login_required
 def debts(request):
     context = {
-        'clients': Client.objects.all(),
+        'clients': Client.objects.all().order_by('-debt'),
         'all_debt': sum([i.debt for i in Client.objects.filter(debt__gt=0)]),
     }
     return render(request, 'debts.html', context)
@@ -74,7 +74,7 @@ def detail(request, id):
         payments = payments.filter(date__date__gte=datetime.now().date().replace(day=1))
     context = {
         'client': client,
-        'payments': payments,
+        'payments': payments.order_by('-date'),
         'sd': sd,
         'ed': ed,
     }
