@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .models import *
+from datetime import datetime
 
 @login_required
 def debts(request):
@@ -13,7 +14,11 @@ def debts(request):
 @login_required
 def add(request):
     name = request.POST.get('name')
-    Client.objects.create(name=name)
+    debt = request.POST.get('debt')
+    Client.objects.create(
+        name=name,
+        debt=int(debt),
+    )
     return redirect('debts')
 
 @login_required
@@ -59,10 +64,18 @@ def minus(request, id):
 
 @login_required
 def detail(request, id):
+    sd = request.GET.get('sd')
+    ed = request.GET.get('ed')
     client = Client.objects.get(id=id)
     payments = Payment.objects.filter(client=client)
+    if sd and ed:
+        payments = payments.filter(date__date__gte=sd, date__date__lte=ed)
+    else:
+        payments = payments.filter(date__date__gte=datetime.now().date().replace(day=1))
     context = {
         'client': client,
-        'payments': payments
+        'payments': payments,
+        'sd': sd,
+        'ed': ed,
     }
     return render(request, 'detail.html', context)

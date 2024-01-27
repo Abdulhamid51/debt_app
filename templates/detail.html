@@ -25,11 +25,18 @@
                 data-bs-target="#delete">O'chirish</button>
             </div>
         </div>
-        <div class="row mt-3">
-            <div class="col-md-6">
-                <input type="text" class="form-control" id="search" placeholder="Qidirish..." onkeyup="myFunction()">
+        <hr>
+        <form class="row mt-3" method="get">
+            <div class="col-md-3">
+                <input type="date" class="form-control mb-2" name="sd" value="{{sd}}">
             </div>
-        </div>
+            <div class="col-md-3">
+                <input type="date" class="form-control mb-2" name="ed" value="{{ed}}">
+            </div>
+            <div class="col-md-3">
+                <button type="submit" class="btn btn-primary">Filterlash</button>
+            </div>
+        </form>
         <div class="row mt-3">
             <div class="col-md-6">
                 <table class="table table-striped" id="table">
