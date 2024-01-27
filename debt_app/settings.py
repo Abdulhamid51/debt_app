@@ -51,7 +51,7 @@ LOGIN_REDIRECT_URL = '/'
 LOGOUT_URL = '/admin/logout/'
 
 # Logout Redirect URL
-LOGOUT_REDIRECT_URL = '/admin/login/'
+LOGOUT_REDIRECT_URL = '/'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
