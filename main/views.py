@@ -2,11 +2,13 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .models import *
 from datetime import datetime
+from django.contrib.auth import authenticate, login, logout
+from django.contrib import messages
 
 @login_required
 def debts(request):
     context = {
-        'clients': Client.objects.all().order_by('-debt'),
+        'clients': Client.objects.filter(user=request.user).order_by('-debt'),
         'all_debt': sum([i.debt for i in Client.objects.filter(debt__gt=0)]),
     }
     return render(request, 'debts.html', context)
@@ -16,6 +18,7 @@ def add(request):
     name = request.POST.get('name')
     debt = request.POST.get('debt')
     Client.objects.create(
+        user=request.user,
         name=name,
         debt=int(debt),
     )
@@ -67,6 +70,8 @@ def detail(request, id):
     sd = request.GET.get('sd')
     ed = request.GET.get('ed')
     client = Client.objects.get(id=id)
+    if client.user != request.user:
+        return redirect('/')
     payments = Payment.objects.filter(client=client)
     if sd and ed:
         payments = payments.filter(date__date__gte=sd, date__date__lte=ed)
@@ -79,3 +84,21 @@ def detail(request, id):
         'ed': ed,
     }
     return render(request, 'detail.html', context)
+
+def login_view(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(request, username=username, password=password)
+        
+        if user is not None:
+            login(request, user)
+            return redirect('/')  # Redirect to a home page or any other page
+        else:
+            messages.error(request, 'Noto\'g\'ri login yoki parol')
+
+    return render(request, 'login.html')
+
+def logout_view(request):
+    logout(request)
+    return redirect('/')

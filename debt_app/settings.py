@@ -42,13 +42,13 @@ INSTALLED_APPS = [
 ]
 
 # Login URL
-LOGIN_URL = '/admin/login/'
+LOGIN_URL = '/login/'
 
 # Login Redirect URL
 LOGIN_REDIRECT_URL = '/'
 
 # Logout URL
-LOGOUT_URL = '/admin/logout/'
+LOGOUT_URL = '/logout/'
 
 # Logout Redirect URL
 LOGOUT_REDIRECT_URL = '/'
@@ -135,6 +135,7 @@ import os
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join('static')
+STATICFILES_DIRS = [os.path.join('staticfiles')]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
