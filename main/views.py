@@ -7,9 +7,10 @@ from django.contrib import messages
 
 @login_required
 def debts(request):
+    client = Client.objects.filter(user=request.user)
     context = {
-        'clients': Client.objects.filter(user=request.user).order_by('-debt'),
-        'all_debt': sum([i.debt for i in Client.objects.filter(debt__gt=0)]),
+        'clients': client.order_by('-debt'),
+        'all_debt': sum([i.debt for i in client.filter(debt__gt=0)]),
     }
     return render(request, 'debts.html', context)
 
